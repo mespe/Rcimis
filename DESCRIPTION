@@ -1,7 +1,7 @@
 Package: Rcimis
-Title: R interface to the CIMIS REST API
+Title: R interface to the CIMIS (California Irrigation Management System) REST API
 Version: 0.1-0
-Description:
+Description: ...
 License: MIT+LICENSE
 Maintainer: Matt Espe <mespe@ucdavis.edu>
 Author: Matt Espe, Duncan Temple Lang
