@@ -1,12 +1,4 @@
-## Function to query CIMIS weather data
-## M. Espe
-## 2015
-
-library(RCurl)
-library(jsonlite)
-
 ## Key is stored separate and not shared
-## api_key <- readLines('~/Dropbox/CIMIS API key')
 
 ## Define function
 
