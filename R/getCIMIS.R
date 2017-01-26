@@ -6,7 +6,7 @@ library(RCurl)
 library(jsonlite)
 
 ## Key is stored separate and not shared
-api_key <- readLines('~/Dropbox/CIMIS API key')
+## api_key <- readLines('~/Dropbox/CIMIS API key')
 
 ## Define function
 
@@ -24,40 +24,60 @@ api_key <- readLines('~/Dropbox/CIMIS API key')
 ##'
 ##' @author Matthew Espe
 ##'
-getCIMIS <- function(api_key, ...,
-                     start, end,
+getCIMIS <- function(start, end,
+                     api_key = getOption("Rcimis_key", stop("You need a key.")),
+                     ..., .opts = list(),
                      url = "http://et.water.ca.gov/api/data")
 {
-  doc <- getForm(uri = url, appKey = api_key,
-                 startDate = start, endDate = end,  ...)
-  fromJSON(doc, flatten = TRUE)$Data$Providers$Records[[1]]
+  doc <- getForm(uri = url, 
+                 startDate = start, endDate = end, ...,
+                 appKey = api_key, .opts = .opts)
+  return(fromJSON(doc, flatten = TRUE)$Data$Providers$Records[[1]])
 }
 
-CIMISweather <- function(api_key, startyear, endyear, station_nbr, ...)
+##' .. content for \description{} (no empty lines) ..
+##'
+##' .. content for \details{} ..
+##' @title 
+##' @param api_key 
+##' @param startyear 
+##' @param endyear 
+##' @param station_nbr 
+##' @param include_qc 
+##' @param ... 
+##' @param .opts 
+##' @return 
+##' @author Matt Espe
+CIMISweather <- function(api_key = getOption("Rcimis_key", stop("You need a key.")),
+                         startyear, endyear, station_nbr,
+                         include_qc = FALSE,
+                         ..., .opts = list())
 {
-  tmp <- getCIMIS(api_key,
+  tmp <- getCIMIS(api_key = api_key,
                   start = paste0(startyear, '-01-01'),
                   end = paste0(endyear, '-12-31'),
                   unitOfMeasure = 'M',
                   targets = station_nbr, ...)
 
-  idx <- grep('[.]Qc$|[.]Unit$', colnames(tmp))
-  tmp <- tmp[,-idx]
+  if(!include_qc){
+      idx <- grepl('[.]Qc$|[.]Unit$', colnames(tmp))
+      tmp <- tmp[,-idx]
+  }
   
-  data <- data.frame(
-      date = as.Date(tmp$Date, "%Y-%m-%d"),
-      station_nbr = station_nbr,
-      doy = tmp$Julian,
-      solrad = tmp[,"DaySolRadAvg.Value"],
-      tmin = tmp[,"DayAirTmpMin.Value"],
-      tmax = tmp[,"DayAirTmpMax.Value"],
-      vp = tmp[,"DayVapPresAvg.Value"],
-      wind = tmp[,"DayWindSpdAvg.Value"],
-      precip = tmp[,"DayPrecip.Value"],
-      stringsAsFactors = FALSE)
+  ## data <- data.frame(
+  ##     date = as.Date(tmp$Date, "%Y-%m-%d"),
+  ##     station_nbr = station_nbr,
+  ##     doy = tmp$Julian,
+  ##     solrad = tmp[,"DaySolRadAvg.Value"],
+  ##     tmin = tmp[,"DayAirTmpMin.Value"],
+  ##     tmax = tmp[,"DayAirTmpMax.Value"],
+  ##     vp = tmp[,"DayVapPresAvg.Value"],
+  ##     wind = tmp[,"DayWindSpdAvg.Value"],
+  ##     precip = tmp[,"DayPrecip.Value"],
+  ##     stringsAsFactors = FALSE)
 
-  data[,2:9] <- sapply(data[,2:9], function(x)
-    as.numeric(as.character(x)))
+  ## data[,2:9] <- sapply(data[,2:9], function(x)
+  ##   as.numeric(as.character(x)))
 
   return(data)
 }
@@ -81,4 +101,3 @@ get_station_info <- function(station_names){
                stringsAsFactors = FALSE)
   
 }
-
