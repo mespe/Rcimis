@@ -1,0 +1,8 @@
+Package: Rcimis
+Title: R interface to the CIMIS REST API
+Version: 0.1-0
+Description:
+License: MIT+LICENSE
+Maintainer: Matt Espe <mespe@ucdavis.edu>
+Author: Matt Espe, Duncan Temple Lang
+Imports: RCurl, jsonlite
