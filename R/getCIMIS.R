@@ -19,12 +19,22 @@
 getCIMIS <- function(start, end,
                      api_key = getOption("Rcimis_key", stop("You need a key.")),
                      ..., .opts = list(),
-                     url = "http://et.water.ca.gov/api/data")
+                     format = "json",
+                     url = "http://et.water.ca.gov/api/data",
+                     parseJSON = TRUE)
 {
+  if(format != "json") {
+      parseJSON = FALSE
+      .opts[["httpheader"]] = c(Accept = "application/xml")
+  }
+      
   doc <- getForm(uri = url, 
                  startDate = start, endDate = end, ...,
                  appKey = api_key, .opts = .opts)
-  return(fromJSON(doc, flatten = TRUE)$Data$Providers$Records[[1]])
+  if(!parseJSON)
+     doc
+  else
+     fromJSON(doc, flatten = TRUE)$Data$Providers$Records[[1]]
 }
 
 ##' .. content for \description{} (no empty lines) ..
