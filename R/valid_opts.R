@@ -1,12 +1,5 @@
 # These should not be documented or exported.  They are helper functions.
 
-valid_opts <-
-function(what = "Daily", opts = ValidOptions){  # match.arg()
-    i = grep(what, names(opts))
-    if(length(i) == 0)
-        stop("what must be one of ", paste(names(opts), collapse = ", "))
-    return(opts[[i]])
-}
 
 # Note that in the API documentation page, day-air-tmp-avg is repeated in the first two rows.
 
@@ -62,25 +55,6 @@ function(items, opts = getDataItems("Daily|Hourly"))
 }
 
 
-check_data_items <-
-function(..., .args = list(...), opts = valid_opts())
-{
-    if(!all(sapply(.args, length) == 0)){
-        i <- match(unlist(.args), opts[,"Data Item"])
-        if(any(is.na(i)))
-        ## Supply proper option
-            stop("Supplied API option is invalid: ",
-                 paste(.args[is.na(i)], collapse = ","))
-    }
-}
-
-doMatch =
-function(args, values)
-{
-  i = pmatch(args, values)
-  which(!is.na(i))
-}
-
 
 isParamValue =
 function(x)
@@ -130,6 +104,16 @@ function(..., .args = list(...))
     
 }
 
+# Unused
+
+valid_opts <-
+function(what = "Daily", opts = ValidOptions){  # match.arg()
+    i = grep(what, names(opts))
+    if(length(i) == 0)
+        stop("what must be one of ", paste(names(opts), collapse = ", "))
+    return(opts[[i]])
+}
+
 check_opts <- function(.args, opts = valid_opts()){
     ## API does not like empty fields
     i <- !sapply(.args, is.null)
@@ -141,3 +125,14 @@ check_opts <- function(.args, opts = valid_opts()){
     return(.args)
 }
 
+check_data_items <-
+function(..., .args = list(...), opts = valid_opts())
+{
+    if(!all(sapply(.args, length) == 0)){
+        i <- match(unlist(.args), opts[,"Data Item"])
+        if(any(is.na(i)))
+        ## Supply proper option
+            stop("Supplied API option is invalid: ",
+                 paste(.args[is.na(i)], collapse = ","))
+    }
+}
