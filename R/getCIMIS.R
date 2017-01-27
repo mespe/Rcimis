@@ -33,7 +33,7 @@ getCIMIS <- function(start, end,
    # their names (and soon their values). We do this on the client side
    # to avoid/reduce errors on the server side.
   args = list(start = start, end = end, ...)
-  args = check_opts(.args = args)
+  args = check_opts(args = args)
   args$appKey = api_key
   
   doc <- getForm(uri = url, 
