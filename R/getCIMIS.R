@@ -56,28 +56,18 @@ getCIMIS <- function(start, end,
 ##' This allows the R user to send a general query to the CIMIS API to get various
 ##' data from the API.
 ##' 
-<<<<<<< HEAD
-##' @title General function to get data from the CIMIS API that takes arbitrary API parameters.
-##' @param startyear 
-##' @param endyear 
-##' @param station_nbr a vector of station numbers, or a single string of numbers separated by ,
-##' @param include_qc 
-##' @param ...
-##' @param api_key the CIMIS API key, typically set via the options(Rcimis_key = '...') to avoid
-##'     exposing this private, secure information in scripts and console.
-##' @param .opts 
-##' @return a data frame
-##' @author Matt Espe
-=======
+##' This is a general function to get data from the CIMIS API that takes arbitrary API parameters.
+##' 
 ##' @title Get data from CIMIS API
 ##' @param start The start date, in ISO format (e.g. "YYYY-MM-DD"). Cannot be earlier than 1987-06-7
 ##' @param end The end date
-##' @param station_nbr The CIMIS assigned statoin number. Can be found using \code{get_station_info}
+##' @param station_nbr The CIMIS assigned station number. Can be found using \code{get_station_info}
+##'     a vector of station numbers, or a single string of numbers separated by ,
 ##' @param unitOfMeasure "M" for metric units, "E" for empirical
 ##' @param ... Additional arguments passed to the CIMIS API. 
 ##' @param include_qc Logical, should the quality control flags be included in the output.
-##' @param api_key The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key"
-##' @param .opts options passed to \code{getForm}
+##' @param api_key The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key".  This avoids exposing this private, secure information in scripts and console.
+##' @param .opts options passed to \code{getForm} to control the RCurl HTTP request.
 ##' @return a data frame, JSON object, or XML object, depending on options passed to getCIMIS
 ##' @author Matt Espe and Duncan Temple Lang
 ##'
@@ -87,7 +77,6 @@ getCIMIS <- function(start, end,
 ##'
 ##' #Davis is station #6, and data starts 1982-07-17
 ##' ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
->>>>>>> 4a761974a08ae96a5eedb7984882ff2828ff4729
 ##'
 CIMISweather <- function(start, end, station_nbr,
                          unitOfMeasure = 'M',
