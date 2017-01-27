@@ -19,8 +19,11 @@
 ##' @author Matthew Espe
 ##'
 getCIMIS <- function(start, end,
-                     api_key = getOption("Rcimis_key", stop("You need a key.")),
-                     ...,
+                     targets = NA,
+                     unitOfMeasure = NA,
+                     dataItems = NA,
+                     prioritizeSCS = NA,
+                     api_key = getOption("Rcimis_key", stop("You need a key.")),                     
                      .opts = list(),
                      format = "json",
                      url = "http://et.water.ca.gov/api/data",
@@ -32,15 +35,14 @@ getCIMIS <- function(start, end,
    # Now combine all of the API parameters (except appKey) and validate
    # their names (and soon their values). We do this on the client side
    # to avoid/reduce errors on the server side.
-  args = list(start = start, end = end, ...)
-
-#  args = checkParams(.args = args)
-  args = check_opts(args = args)
-
+  args = list(startDate = start, endDate = end, unitOfMeasure = unitOfMeasure,
+              dataItems = matchDataItems(dataItems),
+              prioritizeSCS = prioritizeSCS, targets = targets) 
+  args = checkParams(.args = args)
   args$appKey = api_key
 
   if("dataItems" %in% names(args))
-     args$dataItems = check_items(args$dataItems)
+     args$dataItems = matchDataItems(args$dataItems)
   
   
   doc <- getForm(uri = url, 
@@ -79,9 +81,9 @@ getCIMIS <- function(start, end,
 ##' ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
 ##'
 CIMISweather <- function(start, end, station_nbr,
-                         unitOfMeasure = 'M',
+                         unitOfMeasure = NA,
                          dataItems = character(),
-                         prioritizeSCS = 'Y',
+                         prioritizeSCS = NA,
                          ...,
                          include_qc = FALSE,
                          api_key = getOption("Rcimis_key", stop("You need a key.")),
@@ -91,17 +93,17 @@ CIMISweather <- function(start, end, station_nbr,
                     start = start,
                     end = end,
                     unitOfMeasure = unitOfMeasure,
-                    dataItems = check_data_items(dataItems),
-                    prioritizeSCS = match.arg(toupper(prioritize), c("Y", "N")),
+                    dataItems = dataItems,
+                    prioritizeSCS = prioritizeSCS,
                     targets = paste(station_nbr, collapse = ","),
-                    ...)
+                    ..., .opts = .opts)
 
     if(!include_qc){
         idx <- grepl('[.]Qc$|[.]Unit$', colnames(tmp))
         tmp <- tmp[,!idx]
     }
  
-    return(data)
+    return(tmp)
 }
 
 ##' This queries details for all of the CIMIS weather stations.
