@@ -81,9 +81,8 @@ CIMISweather <- function(startyear, endyear, station_nbr,
     return(data)
 }
 
-##' .. content for \description{} (no empty lines) ..
+##' This queries details for all of the CIMIS weather stations.
 ##'
-##' .. content for \details{} ..
 ##' @title Get information about the CIMIS weather stations
 ##' @param station_names 
 ##' @return data.frame with elements describing the station name, number, latitude and longitude,

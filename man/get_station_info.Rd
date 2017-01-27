@@ -2,17 +2,19 @@
 % Please edit documentation in R/getCIMIS.R
 \name{get_station_info}
 \alias{get_station_info}
+\title{Get information about the CIMIS weather stations}
 \usage{
 get_station_info(station_names)
 }
 \arguments{
 \item{station_names}{}
 }
-\description{
-.. content for \description{} (no empty lines) ..
+\value{
+data.frame with elements describing the station name, number, latitude and longitude,
+   elevation, start and end date of the station's activity, county,
 }
-\details{
-.. content for \details{} ..
+\description{
+This queries details for all of the CIMIS weather stations.
 }
 \author{
 Matt Espe

@@ -23,6 +23,9 @@ CIMISweather(startyear, endyear, station_nbr, unitOfMeasure = "M", ...,
 
 \item{.opts}{}
 }
+\value{
+a data frame
+}
 \description{
 This allows the R user to send a query to the CIMIS API to get various
 data.
