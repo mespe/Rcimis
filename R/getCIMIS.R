@@ -33,7 +33,11 @@ getCIMIS <- function(start, end,
    # their names (and soon their values). We do this on the client side
    # to avoid/reduce errors on the server side.
   args = list(start = start, end = end, ...)
+<<<<<<< HEAD
   args = checkParams(.args = args)
+=======
+  args = check_opts(args = args)
+>>>>>>> 4a761974a08ae96a5eedb7984882ff2828ff4729
   args$appKey = api_key
 
   if("dataItems" %in% names(args))
@@ -53,6 +57,7 @@ getCIMIS <- function(start, end,
 ##' This allows the R user to send a general query to the CIMIS API to get various
 ##' data from the API.
 ##' 
+<<<<<<< HEAD
 ##' @title General function to get data from the CIMIS API that takes arbitrary API parameters.
 ##' @param startyear 
 ##' @param endyear 
@@ -64,8 +69,28 @@ getCIMIS <- function(start, end,
 ##' @param .opts 
 ##' @return a data frame
 ##' @author Matt Espe
+=======
+##' @title Get data from CIMIS API
+##' @param start The start date, in ISO format (e.g. "YYYY-MM-DD"). Cannot be earlier than 1987-06-7
+##' @param end The end date
+##' @param station_nbr The CIMIS assigned statoin number. Can be found using \code{get_station_info}
+##' @param unitOfMeasure "M" for metric units, "E" for empirical
+##' @param ... Additional arguments passed to the CIMIS API. 
+##' @param include_qc Logical, should the quality control flags be included in the output.
+##' @param api_key The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key"
+##' @param .opts options passed to \code{getForm}
+##' @return a data frame, JSON object, or XML object, depending on options passed to getCIMIS
+##' @author Matt Espe and Duncan Temple Lang
 ##'
-CIMISweather <- function(startyear, endyear, station_nbr,
+##' @examples
+##' #Get the station number for the Davis, CA station
+##' get_station_info("Davis")
+##'
+##' #Davis is station #6, and data starts 1982-07-17
+##' ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
+>>>>>>> 4a761974a08ae96a5eedb7984882ff2828ff4729
+##'
+CIMISweather <- function(start, end, station_nbr,
                          unitOfMeasure = 'M',
                          dataItems = character(),
                          prioritizeSCS = 'Y',
@@ -75,8 +100,8 @@ CIMISweather <- function(startyear, endyear, station_nbr,
                          .opts = list())
 {
     tmp <- getCIMIS(api_key = api_key,
-                    start = paste0(startyear, '-01-01'),
-                    end = paste0(endyear, '-12-31'),
+                    start = start,
+                    end = end,
                     unitOfMeasure = unitOfMeasure,
                     dataItems = check_data_items(dataItems),
                     prioritizeSCS = match.arg(toupper(prioritize), c("Y", "N")),

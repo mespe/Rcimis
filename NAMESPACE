@@ -2,4 +2,6 @@ import(RCurl)
 import(jsonlite)
 
 export(CIMISweather)
+export(get_station_info)
+
 
