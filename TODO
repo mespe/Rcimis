@@ -1,6 +1,6 @@
 ##TODO
 
-- Tests
+- Tests - What is the preferred way? testthat?
 - Write documentation
 - Add examples
 - Fill in DESCRIPTION and NAMESPACE
