@@ -3,5 +3,5 @@ import(jsonlite)
 
 export(CIMISweather)
 export(get_station_info)
-
+export(getDists)
 
