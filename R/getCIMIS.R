@@ -67,6 +67,8 @@ getCIMIS <- function(start, end,
 ##'
 CIMISweather <- function(startyear, endyear, station_nbr,
                          unitOfMeasure = 'M',
+                         dataItems = character(),
+                         prioritizeSCS = 'Y',
                          ...,
                          include_qc = FALSE,
                          api_key = getOption("Rcimis_key", stop("You need a key.")),
@@ -76,6 +78,8 @@ CIMISweather <- function(startyear, endyear, station_nbr,
                     start = paste0(startyear, '-01-01'),
                     end = paste0(endyear, '-12-31'),
                     unitOfMeasure = unitOfMeasure,
+                    dataItems = check_data_items(dataItems),
+                    prioritizeSCS = match.arg(toupper(prioritize), c("Y", "N")),
                     targets = paste(station_nbr, collapse = ","),
                     ...)
 
