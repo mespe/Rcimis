@@ -50,17 +50,18 @@ getCIMIS <- function(start, end,
 ##' data.
 ##' 
 ##' @title Get data from CIMIS API
-##' @param api_key 
-##' @param startyear 
-##' @param endyear 
-##' @param station_nbr 
-##' @param include_qc 
-##' @param ... 
-##' @param .opts 
-##' @return a data frame
+##' @param start The start date, in ISO format (e.g. "YYYY-MM-DD"). Cannot be earlier than 1987-06-7
+##' @param end The end date
+##' @param station_nbr The CIMIS assigned statoin number. Can be found using \code{get_station_info}
+##' @param unitOfMeasure "M" for metric units, "E" for empirical
+##' @param ... Additional arguments passed to the CIMIS API. 
+##' @param include_qc Logical, should the quality control flags be included in the output.
+##' @param api_key The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key"
+##' @param .opts options passed to \code{getForm}
+##' @return a data frame, JSON object, or XML object, depending on options passed to getCIMIS
 ##' @author Matt Espe
 ##'
-CIMISweather <- function(startyear, endyear, station_nbr,
+CIMISweather <- function(start, end, station_nbr,
                          unitOfMeasure = 'M',
                          ...,
                          include_qc = FALSE,
@@ -68,8 +69,8 @@ CIMISweather <- function(startyear, endyear, station_nbr,
                          .opts = list())
 {
     tmp <- getCIMIS(api_key = api_key,
-                    start = paste0(startyear, '-01-01'),
-                    end = paste0(endyear, '-12-31'),
+                    start = start,
+                    end = end,
                     unitOfMeasure = unitOfMeasure,
                     targets = station_nbr, ...)
 
