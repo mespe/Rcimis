@@ -8,4 +8,5 @@
 - Consider using explicit function parameters to mirror the API parameters
    e.g. unitOfMeasure = 'E', ...
   rather than using ...
--
+- Change get_station_info() to update_station_info(), bundle station info with package (similar to valid_opts), but allow user to easily update
+- Include function to return nearest station and distance from lat/lon (Matt has code to do this)
