@@ -4,3 +4,8 @@
 - Write documentation
 - Add examples
 - Fill in DESCRIPTION and NAMESPACE
+- Check the values of the parameters in the query are valid.
+- Consider using explicit function parameters to mirror the API parameters
+   e.g. unitOfMeasure = 'E', ...
+  rather than using ...
+-
