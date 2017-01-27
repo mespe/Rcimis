@@ -35,9 +35,11 @@ getCIMIS <- function(start, end,
    # Now combine all of the API parameters (except appKey) and validate
    # their names (and soon their values). We do this on the client side
    # to avoid/reduce errors on the server side.
+
   args = list(startDate = start, endDate = end, unitOfMeasure = unitOfMeasure,
               dataItems = matchDataItems(dataItems),
-              prioritizeSCS = prioritizeSCS, targets = targets) 
+              prioritizeSCS = prioritizeSCS, targets = targets)
+browser()  
   args = checkParams(.args = args)
   args$appKey = api_key
 
@@ -61,15 +63,18 @@ getCIMIS <- function(start, end,
 ##' This is a general function to get data from the CIMIS API that takes arbitrary API parameters.
 ##' 
 ##' @title Get data from CIMIS API
-##' @param start The start date, in ISO format (e.g. "YYYY-MM-DD"). Cannot be earlier than 1987-06-7
-##' @param end The end date
-##' @param station_nbr The CIMIS assigned station number. Can be found using \code{get_station_info}
+##' @param startDate The start date, in ISO format (e.g. "YYYY-MM-DD"). Cannot be earlier than 1987-06-7 
+##' @param endDate The end date
+##' @param targets The CIMIS assigned station number. Can be found using \code{get_station_info}
 ##'     a vector of station numbers, or a single string of numbers separated by ,
 ##' @param unitOfMeasure "M" for metric units, "E" for empirical
+##' @param dataItems 
+##' @param prioritizeSCS 
 ##' @param ... Additional arguments passed to the CIMIS API. 
 ##' @param include_qc Logical, should the quality control flags be included in the output.
-##' @param api_key The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key".  This avoids exposing this private, secure information in scripts and console.
+##' @param appKey The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key".  This avoids exposing this private, secure information in scripts and console.
 ##' @param .opts options passed to \code{getForm} to control the RCurl HTTP request.
+##'
 ##' @return a data frame, JSON object, or XML object, depending on options passed to getCIMIS
 ##' @author Matt Espe and Duncan Temple Lang
 ##'
@@ -80,22 +85,22 @@ getCIMIS <- function(start, end,
 ##' #Davis is station #6, and data starts 1982-07-17
 ##' ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
 ##'
-CIMISweather <- function(start, end, station_nbr,
-                         unitOfMeasure = NA,
+CIMISweather <- function(startDate, endDate, targets,
+                         unitOfMeasure = 'M',
                          dataItems = character(),
                          prioritizeSCS = NA,
                          ...,
                          include_qc = FALSE,
-                         api_key = getOption("Rcimis_key", stop("You need a key.")),
+                         appKey = getOption("Rcimis_key", stop("You need a key.")),
                          .opts = list())
 {
-    tmp <- getCIMIS(api_key = api_key,
-                    start = start,
-                    end = end,
+    tmp <- getCIMIS(api_key = appKey,
+                    start = startDate,
+                    end = endDate,
                     unitOfMeasure = unitOfMeasure,
                     dataItems = dataItems,
                     prioritizeSCS = prioritizeSCS,
-                    targets = paste(station_nbr, collapse = ","),
+                    targets = paste(targets, collapse = ","),
                     ..., .opts = .opts)
 
     if(!include_qc){
@@ -105,7 +110,6 @@ CIMISweather <- function(start, end, station_nbr,
  
     return(tmp)
 }
-
 ##' This queries details for all of the CIMIS weather stations.
 ##'
 ##' @title Get information about the CIMIS weather stations

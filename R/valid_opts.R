@@ -60,6 +60,20 @@ function(items, opts = getDataItems("Daily|Hourly"))
    
    ans
 }
+
+
+check_data_items <-
+function(..., .args = list(...), opts = valid_opts())
+{
+    if(!all(sapply(.args, length) == 0)){
+        i <- match(unlist(.args), opts[,"Data Item"])
+        if(any(is.na(i)))
+        ## Supply proper option
+            stop("Supplied API option is invalid: ",
+                 paste(.args[is.na(i)], collapse = ","))
+    }
+}
+
 doMatch =
 function(args, values)
 {
@@ -71,6 +85,7 @@ function(args, values)
 isParamValue =
 function(x)
    !(length(x) == 0 || is.na(x))
+
 
 checkParams <-
 function(..., .args = list(...))
@@ -109,8 +124,20 @@ function(..., .args = list(...))
     if(as.Date(.args$startDate) < as.Date("1987-06-07"))
         stop("startDate out of range.")
     if(as.Date(.args$endDate) > Sys.Date())
-        stop("endDate out of range.")        
+        stop("endDate out of range.")
+
+    .args
     
+}
+
+check_opts <- function(.args, opts = valid_opts()){
+    ## API does not like empty fields
+    i <- !sapply(.args, is.null)
+    .args <- .args[i]
+    ## Might be better to have station specific dates?
+    if(as.Date(.args$start) < as.Date("1987-06-07") || as.Date(.args$end) > Sys.Date())
+        stop("Date out of range.")
+
     return(.args)
 }
 

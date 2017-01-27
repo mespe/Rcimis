@@ -1,9 +1,6 @@
 ##TODO
 
 - Tests - What is the preferred way? testthat?
-- Write documentation
-- Add examples
-- Fill in DESCRIPTION and NAMESPACE
 - Check the values of the parameters in the query are valid.
 - Consider using explicit function parameters to mirror the API parameters
    e.g. unitOfMeasure = 'E', ...
@@ -19,4 +16,10 @@
    so rais a condition/error of class "INVALID APP KEY".
 - Change get_station_info() to update_station_info(), bundle station info with package (similar to valid_opts), but allow user to easily update
 - Include function to return nearest station and distance from lat/lon (Matt has code to do this)
+- Fix check_data_items: currently will not work with no dataItems, or with supplied dataItems
 
+
+DONE(ish)
+- Write documentation
+- Add examples
+- Fill in DESCRIPTION and NAMESPACE
