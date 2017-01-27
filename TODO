@@ -8,7 +8,8 @@
 - Consider using explicit function parameters to mirror the API parameters
    e.g. unitOfMeasure = 'E', ...
   rather than using ...
-  (Added to CIMISweather())
+  (unitOfMeasure explicitly added to CIMISweather())
+  There are only 7 of these and 4 are directly supported (appKey, start, end, unitOfMeasure)
 - Additional API functionality
     http://et.water.ca.gov/api/stationzipcode/<zip>
     http://et.water.ca.gov/api/spatialzipcode
