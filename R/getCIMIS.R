@@ -42,7 +42,7 @@ getCIMIS <- function(start, end,
   args$appKey = api_key
 
   if("dataItems" %in% names(args))
-     args$dataItems = matchDataItems(args$dataItems)
+     args$dataItems = paste(matchDataItems(args$dataItems), collapse = ",")
   
   
   doc <- getForm(uri = url, 
