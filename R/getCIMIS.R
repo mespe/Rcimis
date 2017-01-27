@@ -33,11 +33,10 @@ getCIMIS <- function(start, end,
    # their names (and soon their values). We do this on the client side
    # to avoid/reduce errors on the server side.
   args = list(start = start, end = end, ...)
-<<<<<<< HEAD
-  args = checkParams(.args = args)
-=======
+
+#  args = checkParams(.args = args)
   args = check_opts(args = args)
->>>>>>> 4a761974a08ae96a5eedb7984882ff2828ff4729
+
   args$appKey = api_key
 
   if("dataItems" %in% names(args))
