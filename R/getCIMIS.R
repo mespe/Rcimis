@@ -59,7 +59,14 @@ getCIMIS <- function(start, end,
 ##' @param api_key The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key"
 ##' @param .opts options passed to \code{getForm}
 ##' @return a data frame, JSON object, or XML object, depending on options passed to getCIMIS
-##' @author Matt Espe
+##' @author Matt Espe and Duncan Temple Lang
+##'
+##' @examples
+##' #Get the station number for the Davis, CA station
+##' get_station_info("Davis")
+##'
+##' #Davis is station #6, and data starts 1982-07-17
+##' ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
 ##'
 CIMISweather <- function(start, end, station_nbr,
                          unitOfMeasure = 'M',

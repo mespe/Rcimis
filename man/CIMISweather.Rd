@@ -32,7 +32,15 @@ a data frame, JSON object, or XML object, depending on options passed to getCIMI
 This allows the R user to send a query to the CIMIS API to get various
 data.
 }
+\examples{
+#Get the station number for the Davis, CA station
+get_station_info("Davis")
+
+#Davis is station #6, and data starts 1982-07-17
+ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
+
+}
 \author{
-Matt Espe
+Matt Espe and Duncan Temple Lang
 }
 
