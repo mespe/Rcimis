@@ -1,3 +1,4 @@
 import(RCurl)
 import(jsonlite)
 
+export(CIMISweather)
