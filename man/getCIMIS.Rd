@@ -5,8 +5,8 @@
 \title{Get CIMIS data}
 \usage{
 getCIMIS(start, end, api_key = getOption("Rcimis_key",
-  stop("You need a key.")), ..., .opts = list(),
-  url = "http://et.water.ca.gov/api/data")
+  stop("You need a key.")), ..., .opts = list(), format = "json",
+  url = "http://et.water.ca.gov/api/data", parseJSON = (format == "json"))
 }
 \arguments{
 \item{start}{start date, in ISO format ("YYYY-mm-dd")}
@@ -19,15 +19,15 @@ getCIMIS(start, end, api_key = getOption("Rcimis_key",
 passed along as query parameters}
 
 \item{url}{default URL to query}
+
+\item{parseJSON}{logical value indicating whether to process the result as JSON or just return it.
+If format is not "json, then this defaults to returning the document from CIMIS.}
 }
 \value{
 a data.frame object of query results
 }
 \description{
 Query the CIMIS API
-}
-\details{
-.. content for \details{} ..
 }
 \author{
 Matthew Espe

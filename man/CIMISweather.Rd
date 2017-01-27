@@ -2,10 +2,11 @@
 % Please edit documentation in R/getCIMIS.R
 \name{CIMISweather}
 \alias{CIMISweather}
+\title{Get data from CIMIS API}
 \usage{
-CIMISweather(startyear, endyear, station_nbr, include_qc = FALSE, ...,
-  api_key = getOption("Rcimis_key", stop("You need a key.")),
-  .opts = list())
+CIMISweather(startyear, endyear, station_nbr, unitOfMeasure = "M", ...,
+  include_qc = FALSE, api_key = getOption("Rcimis_key",
+  stop("You need a key.")), .opts = list())
 }
 \arguments{
 \item{startyear}{}
@@ -14,19 +15,17 @@ CIMISweather(startyear, endyear, station_nbr, include_qc = FALSE, ...,
 
 \item{station_nbr}{}
 
-\item{include_qc}{}
-
 \item{...}{}
+
+\item{include_qc}{}
 
 \item{api_key}{}
 
 \item{.opts}{}
 }
 \description{
-.. content for \description{} (no empty lines) ..
-}
-\details{
-.. content for \details{} ..
+This allows the R user to send a query to the CIMIS API to get various
+data.
 }
 \author{
 Matt Espe

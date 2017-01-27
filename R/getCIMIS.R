@@ -4,7 +4,7 @@
 
 ##' Query the CIMIS API
 ##'
-##' .. content for \details{} ..
+##' 
 ##' @title Get CIMIS data
 ##' @param api_key a personal API key for accessing data
 ##' @param ... additional arguments in the form of "key = value" pairs
@@ -12,35 +12,44 @@
 ##' @param start start date, in ISO format ("YYYY-mm-dd")
 ##' @param end end date, in ISO format
 ##' @param url default URL to query
+##' @param parseJSON logical value indicating whether to process the result as JSON or just return it.
+##'     If format is not "json, then this defaults to returning the document from CIMIS.
 ##' @return a data.frame object of query results
 ##'
 ##' @author Matthew Espe
 ##'
 getCIMIS <- function(start, end,
                      api_key = getOption("Rcimis_key", stop("You need a key.")),
-                     ..., .opts = list(),
+                     ...,
+                     .opts = list(),
                      format = "json",
                      url = "http://et.water.ca.gov/api/data",
-                     parseJSON = TRUE)
+                     parseJSON = (format == "json"))
 {
-  if(format != "json") {
-      parseJSON = FALSE
-      .opts[["httpheader"]] = c(Accept = "application/xml")
-  }
-      
+  if(format != "json") 
+     .opts[["httpheader"]] = c(Accept = "application/xml")
+
+   # Now combine all of the API parameters (except appKey) and validate
+   # their names (and soon their values). We do this on the client side
+   # to avoid/reduce errors on the server side.
+  args = list(start = start, end = end, ...)
+  args = check_opts(.args = args)
+  args$appKey = api_key
+  
   doc <- getForm(uri = url, 
-                 startDate = start, endDate = end, ...,
-                 appKey = api_key, .opts = .opts)
+                 .params = args,
+                 .opts = .opts)
   if(!parseJSON)
      doc
   else
      fromJSON(doc, flatten = TRUE)$Data$Providers$Records[[1]]
 }
 
-##' .. content for \description{} (no empty lines) ..
-##'
-##' .. content for \details{} ..
-##' @title 
+##' 
+##' This allows the R user to send a query to the CIMIS API to get various
+##' data.
+##' 
+##' @title Get data from CIMIS API
 ##' @param api_key 
 ##' @param startyear 
 ##' @param endyear 
@@ -48,27 +57,25 @@ getCIMIS <- function(start, end,
 ##' @param include_qc 
 ##' @param ... 
 ##' @param .opts 
-##' @return 
+##' @return a data frame
 ##' @author Matt Espe
 ##'
 CIMISweather <- function(startyear, endyear, station_nbr,
-                         include_qc = FALSE,
+                         unitOfMeasure = 'M',
                          ...,
+                         include_qc = FALSE,
                          api_key = getOption("Rcimis_key", stop("You need a key.")),
                          .opts = list())
 {
-    ## Check "..." for valid options
-    check_opts(args = ...)
-    
     tmp <- getCIMIS(api_key = api_key,
                     start = paste0(startyear, '-01-01'),
                     end = paste0(endyear, '-12-31'),
-                    unitOfMeasure = 'M',
+                    unitOfMeasure = unitOfMeasure,
                     targets = station_nbr, ...)
 
     if(!include_qc){
         idx <- grepl('[.]Qc$|[.]Unit$', colnames(tmp))
-        tmp <- tmp[,-idx]
+        tmp <- tmp[,!idx]
     }
  
     return(data)
@@ -77,9 +84,10 @@ CIMISweather <- function(startyear, endyear, station_nbr,
 ##' .. content for \description{} (no empty lines) ..
 ##'
 ##' .. content for \details{} ..
-##' @title 
+##' @title Get information about the CIMIS weather stations
 ##' @param station_names 
-##' @return 
+##' @return data.frame with elements describing the station name, number, latitude and longitude,
+##'    elevation, start and end date of the station's activity, county, 
 ##' @author Matt Espe
 ##'
 get_station_info <- function(station_names){
