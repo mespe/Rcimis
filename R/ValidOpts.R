@@ -1,3 +1,6 @@
+# These are not options or parameters for the API, but the names of fields that can be returned
+# in the query??
+#
 ValidOptions <- 
 structure(list(`Daily Data Items` = c("day-air-tmp-avg", "day-air-tmp-avg", 
 "day-air-tmp-min", "day-dew-pnt", "day-eto", "day-asce-eto", 

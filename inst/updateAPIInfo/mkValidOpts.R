@@ -1,3 +1,5 @@
+library(XML)
+
 updateValidOptions =
     #
     # This is not used directly in the package but is used
@@ -11,7 +13,7 @@ updateValidOptions =
     #
 function(filename = "../../R/ValidOpts.R")    
 {
-    tbls <- readHTMLTable("http://et.water.ca.gov/Rest/Index", stringsAsFactors = FALSE)[c("Daily Data Items", "Hourly Data Items")  ]
+    tbls <- readHTMLTable("http://et.water.ca.gov/Rest/Index", stringsAsFactors = FALSE)#[c("Daily Data Items", "Hourly Data Items")  ]
     items = lapply(tbls, `[[`, "Data Item")
 
     if(length(filename) && !is.na(filename) && filename != "") {

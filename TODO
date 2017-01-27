@@ -8,4 +8,14 @@
 - Consider using explicit function parameters to mirror the API parameters
    e.g. unitOfMeasure = 'E', ...
   rather than using ...
--
+  (Added to CIMISweather())
+- Additional API functionality
+    http://et.water.ca.gov/api/stationzipcode/<zip>
+    http://et.water.ca.gov/api/spatialzipcode
+    http://et.water.ca.gov/api/spatialzipcode/<zip>
+- Raise API-specific errors/exceptions based on the table in the API documentation
+  e.g.  ERR1006  INVALID APP KEY
+   so rais a condition/error of class "INVALID APP KEY".
+
+
+

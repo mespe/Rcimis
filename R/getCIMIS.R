@@ -33,8 +33,12 @@ getCIMIS <- function(start, end,
    # their names (and soon their values). We do this on the client side
    # to avoid/reduce errors on the server side.
   args = list(start = start, end = end, ...)
-  args = check_opts(.args = args)
+  args = checkParams(.args = args)
   args$appKey = api_key
+
+  if("dataItems" %in% names(args))
+     args$dataItems = check_items(args$dataItems)
+  
   
   doc <- getForm(uri = url, 
                  .params = args,
@@ -46,16 +50,17 @@ getCIMIS <- function(start, end,
 }
 
 ##' 
-##' This allows the R user to send a query to the CIMIS API to get various
-##' data.
+##' This allows the R user to send a general query to the CIMIS API to get various
+##' data from the API.
 ##' 
-##' @title Get data from CIMIS API
-##' @param api_key 
+##' @title General function to get data from the CIMIS API that takes arbitrary API parameters.
 ##' @param startyear 
 ##' @param endyear 
-##' @param station_nbr 
+##' @param station_nbr a vector of station numbers, or a single string of numbers separated by ,
 ##' @param include_qc 
-##' @param ... 
+##' @param ...
+##' @param api_key the CIMIS API key, typically set via the options(Rcimis_key = '...') to avoid
+##'     exposing this private, secure information in scripts and console.
 ##' @param .opts 
 ##' @return a data frame
 ##' @author Matt Espe
@@ -71,7 +76,8 @@ CIMISweather <- function(startyear, endyear, station_nbr,
                     start = paste0(startyear, '-01-01'),
                     end = paste0(endyear, '-12-31'),
                     unitOfMeasure = unitOfMeasure,
-                    targets = station_nbr, ...)
+                    targets = paste(station_nbr, collapse = ","),
+                    ...)
 
     if(!include_qc){
         idx <- grepl('[.]Qc$|[.]Unit$', colnames(tmp))
@@ -84,18 +90,23 @@ CIMISweather <- function(startyear, endyear, station_nbr,
 ##' This queries details for all of the CIMIS weather stations.
 ##'
 ##' @title Get information about the CIMIS weather stations
-##' @param station_names 
+##' @param station_names optional character vector of station names used to subset those of interest,
+##'     or omitted to return all.
 ##' @return data.frame with elements describing the station name, number, latitude and longitude,
 ##'    elevation, start and end date of the station's activity, county, 
 ##' @author Matt Espe
 ##'
-get_station_info <- function(station_names){
+get_station_info <- function(station_names = character()){
   # Returns a comma separated list of station numbers
   # Given the station names
 
     stations <- getURL('http://et.water.ca.gov/api/station')
     tmp <- fromJSON(stations)
-    i <- which(tmp$Stations$Name %in% station_names)
+    i <- if(length(station_names))
+            which(tmp$Stations$Name %in% station_names)
+         else
+            rep(TRUE, length(tmp$Stations$Name))
+    
     data.frame(stn_nm = tmp$Stations$Name[i],
                stn_nbr = tmp$Stations$StationNbr[i],
                lat = do.call(rbind,strsplit(tmp$Stations$HmsLatitude[i], " / "))[,2],
@@ -105,5 +116,4 @@ get_station_info <- function(station_names){
                stn_end = as.Date(tmp$Stations$DisconnectDate[i], "%m/%d/%Y"),
                county = tmp$Stations$County[i],
                stringsAsFactors = FALSE)
-  
 }
