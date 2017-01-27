@@ -1,16 +1,16 @@
-#!!! These should not be documented or exported.
+# These should not be documented or exported.
 
 valid_opts <-
 function(what = "Daily", opts = ValidOptions){  # match.arg()
     i = grep(what, names(opts))
     if(length(i) == 0)
-        stop(".....")
+        stop("what must be one of ", paste(names(opts), collapse = ", "))
     return(opts[[i]])
-        
 }
 
 
-check_opts <- function(..., .args = list(...), opts = valid_opts()){
+check_data_items <-
+function(..., .args = list(...), opts = valid_opts()){
     i <- match(.args, opts)
     if(any(is.na(i)))
         ## Supply proper option
