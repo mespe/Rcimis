@@ -16,10 +16,10 @@ function(filename = "../../R/ValidOpts.R")
     tbls <- readHTMLTable("http://et.water.ca.gov/Rest/Index", stringsAsFactors = FALSE)#[c("Daily Data Items", "Hourly Data Items")  ]
 
     if(length(filename) && !is.na(filename) && filename != "") {
-       txt = capture.output(dput(items))
+       txt = capture.output(dput(tbls))
        cat("ValidOptions <- ", txt, sep = "\n", file = filename)
     }
-    items
+    tbls
 }
 
 
