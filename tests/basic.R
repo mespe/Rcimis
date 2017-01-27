@@ -3,4 +3,6 @@ if(!is.na(getOption("Rcimis_key", NA))) {
  d = CIMISweather("2015-01-01",  "2015-01-20", 12)
  
  d = CIMISweather("2015-01-01",  "2015-01-20", 12, dataItems = c("day-air-tmp-min", "day-air-tmp-avg"))
+
+ d = CIMISweather("2015-01-01",  "2015-01-20", 12, dataItems = c("day-air-tmp-min", "day-air-tmp-avg"), unitOfMeasure = "E")
 }

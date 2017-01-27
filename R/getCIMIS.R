@@ -39,7 +39,7 @@ getCIMIS <- function(start, end,
   args = list(startDate = start, endDate = end, unitOfMeasure = unitOfMeasure,
               dataItems = matchDataItems(dataItems),
               prioritizeSCS = prioritizeSCS, targets = targets)
-browser()  
+
   args = checkParams(.args = args)
   args$appKey = api_key
 
