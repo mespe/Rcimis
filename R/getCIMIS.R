@@ -6,24 +6,34 @@
 ##'
 ##' 
 ##' @title Get CIMIS data
-##' @param api_key a personal API key for accessing data
-##' @param ... additional arguments in the form of "key = value" pairs
-##'     passed along as query parameters
 ##' @param start start date, in ISO format ("YYYY-mm-dd")
 ##' @param end end date, in ISO format
+##' @param targets Either the station number, the zip code, address, or lat/long separated by commas. See API documentation for more information 
+##' @param unitOfMeasure "M" for metric units, "E" for empirial, defaults to "E"
+##' @param dataItems optional, if not provided will return all daily variables 
+##' @param prioritizeSCS should data from Spatial CIMIS (interpolated) be prioritized?
+##' @param appKey The API key for CIMIS. By default, the function looks in getOption
+##' @param .opts Additional options passed to \code{getForm}
+##' @param format XML or JSON, defaults to JSON
 ##' @param url default URL to query
 ##' @param parseJSON logical value indicating whether to process the result as JSON or just return it.
 ##'     If format is not "json, then this defaults to returning the document from CIMIS.
-##' @return a data.frame object of query results
 ##'
-##' @author Matthew Espe
+##' @return a data.frame, XML, or JSON (depending on above options) object of query results
 ##'
-getCIMIS <- function(start, end,
+##' @author Matthew Espe and Duncan Temple Lang
+##'
+##' @examples
+##' ## Get Evapo-transpiration for Jan 2015 in Metric units from station 6
+##' getCIMIS("2015-01-01", "2015-02-01", 6, "M", "day-eto", FALSE)
+##'
+##' 
+getCIMIS = function(start, end,
                      targets = NA,
                      unitOfMeasure = NA,
                      dataItems = NA,
                      prioritizeSCS = NA,
-                     api_key = getOption("Rcimis_key", stop("You need a key.")),                     
+                     appKey = getOption("Rcimis_key", stop("You need a key.")),                     
                      .opts = list(),
                      format = "json",
                      url = "http://et.water.ca.gov/api/data",
@@ -41,13 +51,13 @@ getCIMIS <- function(start, end,
               prioritizeSCS = prioritizeSCS, targets = targets)
 
   args = checkParams(.args = args)
-  args$appKey = api_key
+  args$appKey = appKey
 
   if("dataItems" %in% names(args))
      args$dataItems = paste(matchDataItems(args$dataItems), collapse = ",")
   
   
-  doc <- getForm(uri = url, 
+  doc = getForm(uri = url, 
                  .params = args,
                  .opts = .opts)
   if(!parseJSON)
@@ -64,14 +74,13 @@ getCIMIS <- function(start, end,
 ##' 
 ##' @title Get data from CIMIS API
 ##' @param startDate The start date, in ISO format (e.g. "YYYY-MM-DD"). Cannot be earlier than 1987-06-7 
-##' @param endDate The end date
-##' @param targets The CIMIS assigned station number. Can be found using \code{get_station_info}
-##'     a vector of station numbers, or a single string of numbers separated by ,
+##' @param endDate The end date in ISO format
+##' @param targets The CIMIS assigned station number, zip code, address, or Lat/Long (comma separated). See \code{StnInfo} dataset for list of stations.
 ##' @param unitOfMeasure "M" for metric units, "E" for empirical
-##' @param dataItems 
-##' @param prioritizeSCS 
+##' @param dataItems optional. If not provided, function will return all variables
+##' @param prioritizeSCS Should results from Spatial CIMIS (interpolated) be prioritized?
 ##' @param ... Additional arguments passed to the CIMIS API. 
-##' @param include_qc Logical, should the quality control flags be included in the output.
+##' @param includeQC Should columns with quality control flags be included in results?
 ##' @param appKey The API key. By default, the function checks \code{getOptions} for the api as "Rcimis_key".  This avoids exposing this private, secure information in scripts and console.
 ##' @param .opts options passed to \code{getForm} to control the RCurl HTTP request.
 ##'
@@ -80,21 +89,21 @@ getCIMIS <- function(start, end,
 ##'
 ##' @examples
 ##' #Get the station number for the Davis, CA station
-##' get_station_info("Davis")
+##' # Fix later
 ##'
 ##' #Davis is station #6, and data starts 1982-07-17
-##' ans = CIMISweather(start = "1987-07-17", end = Sys.Date())
+##' ans = CIMISweather(startDate = "1987-07-17", endDate = Sys.Date(), targets = 6)
 ##'
-CIMISweather <- function(startDate, endDate, targets,
+CIMISweather = function(startDate, endDate, targets,
                          unitOfMeasure = 'M',
                          dataItems = character(),
                          prioritizeSCS = NA,
                          ...,
-                         include_qc = FALSE,
+                         includeQC = FALSE,
                          appKey = getOption("Rcimis_key", stop("You need a key.")),
                          .opts = list())
 {
-    tmp <- getCIMIS(api_key = appKey,
+    tmp = getCIMIS(appKey = appKey,
                     start = startDate,
                     end = endDate,
                     unitOfMeasure = unitOfMeasure,
@@ -103,40 +112,11 @@ CIMISweather <- function(startDate, endDate, targets,
                     targets = paste(targets, collapse = ","),
                     ..., .opts = .opts)
 
-    if(!include_qc){
-        idx <- grepl('[.]Qc$|[.]Unit$', colnames(tmp))
-        tmp <- tmp[,!idx]
+    if(!includeQC){
+        idx = grepl('[.]Qc$|[.]Unit$', colnames(tmp))
+        tmp = tmp[,!idx]
     }
  
     return(tmp)
 }
-##' This queries details for all of the CIMIS weather stations.
-##'
-##' @title Get information about the CIMIS weather stations
-##' @param station_names optional character vector of station names used to subset those of interest,
-##'     or omitted to return all.
-##' @return data.frame with elements describing the station name, number, latitude and longitude,
-##'    elevation, start and end date of the station's activity, county, 
-##' @author Matt Espe
-##'
-get_station_info <- function(station_names = character()){
-  # Returns a comma separated list of station numbers
-  # Given the station names
 
-    stations <- getURL('http://et.water.ca.gov/api/station')
-    tmp <- fromJSON(stations)
-    i <- if(length(station_names))
-            which(tmp$Stations$Name %in% station_names)
-         else
-            rep(TRUE, length(tmp$Stations$Name))
-    
-    data.frame(stn_nm = tmp$Stations$Name[i],
-               stn_nbr = tmp$Stations$StationNbr[i],
-               lat = do.call(rbind,strsplit(tmp$Stations$HmsLatitude[i], " / "))[,2],
-               lon = do.call(rbind,strsplit(tmp$Stations$HmsLongitude[i], " / "))[,2],
-               stn_ele = as.numeric(tmp$Stations$Elevation[i]) * 0.3048,
-               stn_start = as.Date(tmp$Stations$ConnectDate[i], "%m/%d/%Y"),
-               stn_end = as.Date(tmp$Stations$DisconnectDate[i], "%m/%d/%Y"),
-               county = tmp$Stations$County[i],
-               stringsAsFactors = FALSE)
-}

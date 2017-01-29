@@ -8,5 +8,6 @@ Maintainer: Matt Espe <mespe@ucdavis.edu>
 Author: Matt Espe, Duncan Temple Lang
 Imports:
     RCurl,
-    jsonlite
+    jsonlite,
+	geosphere
 RoxygenNote: 5.0.1

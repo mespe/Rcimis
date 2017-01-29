@@ -1,42 +1,41 @@
-updateStationInfo <- function(filename = "../data/StnInfo.rda"){
+updateStationInfo = function(filename = "../data/StnInfo.rda"){
     ## Not sure how we want to handle this
-    StnInfo <- get_station_info()
+    StnInfo = getStationInfo()
     save(StnInfo, file = filename)    
 }
 
-
-get_station_info <- function(){
+getStationInfo = function(...){
     ##This gets the station info from the CIMIS site
-
-    stations <- getURL('http://et.water.ca.gov/api/station')
-    tmp <- fromJSON(stations)$Stations
+    stations = getURL('http://et.water.ca.gov/api/station', ...)
+    tmp = fromJSON(stations)$Stations
     formatStnInfo(tmp)
 }
 
-formatStnInfo <- function(station_info){
+formatStnInfo = function(stationInfo){
     ## Fix some of the columns
     ## Lat/Long has colname Hms (Hours minutes seconds) but also contains decimal degree values
     ## Super hacky - fix later
-    lat_tmp <- splitLatLon(station_info$HmsLatitude)
-    lon_tmp <- splitLatLon(station_info$HmsLongitude)
-    station_info$HmsLatitude <- lat_tmp[,1]
-    station_info$DdLatitude <- lat_tmp[,2]
-    station_info$HmsLongitude <- lon_tmp[,1]
-    station_info$DdLongitude <- lon_tmp[,2]
+    lat_tmp = splitLatLon(stationInfo$HmsLatitude)
+    lon_tmp = splitLatLon(stationInfo$HmsLongitude)
+    stationInfo$HmsLatitude = lat_tmp[,1]
+    stationInfo$DdLatitude = lat_tmp[,2]
+    stationInfo$HmsLongitude = lon_tmp[,1]
+    stationInfo$DdLongitude = lon_tmp[,2]
 
-    
-    station_info$Elevation = as.numeric(station_info$Elevation)
-    station_info$Elevation_m = station_info$Elevation * 0.3048
-    station_info$ConnectDate = as.Date(station_info$ConnectDate, "%m/%d/%Y")
-    station_info$DisconnectDate = as.Date(station_info$DisconnectDate, "%m/%d/%Y")
+    stationInfo$Elevation = as.numeric(stationInfo$Elevation)
+    stationInfo$Elevation_m = stationInfo$Elevation * 0.3048
+    stationInfo$ConnectDate = as.Date(stationInfo$ConnectDate, "%m/%d/%Y")
+    stationInfo$DisconnectDate = as.Date(stationInfo$DisconnectDate, "%m/%d/%Y")
 
-    return(station_info)
+    return(stationInfo)
 }
 
-splitLatLon <- function(x){
-    ans <- strsplit(x, " / ")
-    ans <- as.data.frame(do.call(rbind, ans),
+splitLatLon = function(x){
+    ## Simple function to split the lat and lon columns
+    ## To Hms and DD
+    ans = strsplit(x, " / ")
+    ans = as.data.frame(do.call(rbind, ans),
                          stringsAsFactors = FALSE)
-    ans[,2] <- as.numeric(ans[,2])
+    ans[,2] = as.numeric(ans[,2])
     return(ans)
 }

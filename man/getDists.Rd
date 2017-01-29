@@ -13,7 +13,7 @@ getDists(lat, lon, n = 1, FUN = distHaversine)
 
 \item{n}{number of nearest stations to return}
 
-\item{FUN}{the function used to calculate the distance. Passed to the \code{distm} function in the \package{geospheres} package}
+\item{FUN}{the function used to calculate the distance. Passed to the \code{distm} function in the \code{geospheres} package}
 }
 \value{
 a subset of \code{StnInfo} ordered by distance to the specificed point, with the distance in Km added

@@ -4,8 +4,9 @@
 \alias{getCIMIS}
 \title{Get CIMIS data}
 \usage{
-getCIMIS(start, end, api_key = getOption("Rcimis_key",
-  stop("You need a key.")), ..., .opts = list(), format = "json",
+getCIMIS(start, end, targets = NA, unitOfMeasure = NA, dataItems = NA,
+  prioritizeSCS = NA, appKey = getOption("Rcimis_key",
+  stop("You need a key.")), .opts = list(), format = "json",
   url = "http://et.water.ca.gov/api/data", parseJSON = (format == "json"))
 }
 \arguments{
@@ -13,10 +14,19 @@ getCIMIS(start, end, api_key = getOption("Rcimis_key",
 
 \item{end}{end date, in ISO format}
 
-\item{api_key}{a personal API key for accessing data}
+\item{targets}{Either the station number, the zip code, address, or lat/long separated by commas. See API documentation for more information}
 
-\item{...}{additional arguments in the form of "key = value" pairs
-passed along as query parameters}
+\item{unitOfMeasure}{"M" for metric units, "E" for empirial, defaults to "E"}
+
+\item{dataItems}{optional, if not provided will return all daily variables}
+
+\item{prioritizeSCS}{should data from Spatial CIMIS (interpolated) be prioritized?}
+
+\item{appKey}{The API key for CIMIS. By default, the function looks in getOption}
+
+\item{.opts}{Additional options passed to \code{getForm}}
+
+\item{format}{XML or JSON, defaults to JSON}
 
 \item{url}{default URL to query}
 
@@ -24,12 +34,18 @@ passed along as query parameters}
 If format is not "json, then this defaults to returning the document from CIMIS.}
 }
 \value{
-a data.frame object of query results
+a data.frame, XML, or JSON (depending on above options) object of query results
 }
 \description{
 Query the CIMIS API
 }
+\examples{
+## Get Evapo-transpiration for Jan 2015 in Metric units from station 6
+getCIMIS("2015-01-01", "2015-02-01", 6, "M", "day-eto", FALSE)
+
+
+}
 \author{
-Matthew Espe
+Matthew Espe and Duncan Temple Lang
 }
 
