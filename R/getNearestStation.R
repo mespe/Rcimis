@@ -15,6 +15,7 @@
 ##' getDists(37,8, -121.22, n = 5)
 ##' 
 getDists = function(lat, lon, n = 1, FUN = distHaversine){
+    data(StnInfo)
     ## Only compare stations which are close (within a degree)
     close = (diff(StnInfo$DdLatitude - lat) <= 1) & (diff(StnInfo$DdLongitude - lon) <= 1)
     

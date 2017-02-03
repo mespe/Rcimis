@@ -10,4 +10,5 @@ Imports:
     RCurl,
     jsonlite,
 	geosphere
+LazyData: true
 RoxygenNote: 5.0.1

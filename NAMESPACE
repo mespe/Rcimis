@@ -1,5 +1,6 @@
 import(RCurl)
 import(jsonlite)
+import(geosphere)
 
 export(CIMISweather)
 export(getDists)
