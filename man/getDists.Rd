@@ -4,7 +4,8 @@
 \alias{getDists}
 \title{getDists}
 \usage{
-getDists(lat, lon, n = 1, FUN = distHaversine, StnInfo = getStationInfo())
+getDists(lat, lon, n = 1, FUN = distHaversine, cached = TRUE,
+  StnInfo = getStationInfo(cached))
 }
 \arguments{
 \item{lat}{The latitude, in decimal degrees}
@@ -14,7 +15,11 @@ getDists(lat, lon, n = 1, FUN = distHaversine, StnInfo = getStationInfo())
 \item{n}{number of nearest stations to return}
 
 \item{FUN}{the function used to calculate the distance. Passed to the \code{distm} function in the \code{geospheres} package}
-\item{StnInfo}{auto}
+
+\item{cached}{logical, should the cached station information be used, or should a up to the date version be retrieved from CIMIS}
+
+\item{StnInfo}{object providing details of the CIMIS weather stations. This can be retrieved
+using \code{getStationInfo} or \code{updateStationInfo}.}
 }
 \value{
 a subset of \code{StnInfo} ordered by distance to the specificed point, with the distance in Km added
@@ -33,4 +38,3 @@ getDists(37.8, -121.22, n = 5)
 \author{
 Matt Espe
 }
-

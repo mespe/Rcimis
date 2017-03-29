@@ -41,14 +41,12 @@ This is a general function to get data from the CIMIS API that takes arbitrary A
 }
 \examples{
 #Get the station number for the Davis, CA station
-# Fix later
 
 #Davis is station #6, and data starts 1982-07-17
-if(!is.null(getOption("Rcimis_key"))) 
-   ans = CIMISweather(startDate = "1987-07-17", endDate = Sys.Date(), targets = 6)
+if(!is.null(getOption("Rcimis_key")))
+    ans = CIMISweather(startDate = "1987-07-17", endDate = Sys.Date(), targets = 6)
 
 }
 \author{
 Matt Espe and Duncan Temple Lang
 }
-
