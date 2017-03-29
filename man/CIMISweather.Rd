@@ -44,7 +44,8 @@ This is a general function to get data from the CIMIS API that takes arbitrary A
 # Fix later
 
 #Davis is station #6, and data starts 1982-07-17
-ans = CIMISweather(startDate = "1987-07-17", endDate = Sys.Date(), targets = 6)
+if(!is.null(getOption("Rcimis_key"))) 
+   ans = CIMISweather(startDate = "1987-07-17", endDate = Sys.Date(), targets = 6)
 
 }
 \author{

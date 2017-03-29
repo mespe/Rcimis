@@ -4,7 +4,7 @@
 \alias{getDists}
 \title{getDists}
 \usage{
-getDists(lat, lon, n = 1, FUN = distHaversine)
+getDists(lat, lon, n = 1, FUN = distHaversine, StnInfo = getStationInfo())
 }
 \arguments{
 \item{lat}{The latitude, in decimal degrees}
@@ -14,6 +14,7 @@ getDists(lat, lon, n = 1, FUN = distHaversine)
 \item{n}{number of nearest stations to return}
 
 \item{FUN}{the function used to calculate the distance. Passed to the \code{distm} function in the \code{geospheres} package}
+\item{StnInfo}{auto}
 }
 \value{
 a subset of \code{StnInfo} ordered by distance to the specificed point, with the distance in Km added
@@ -26,7 +27,7 @@ This function gets the nearest n stations from a geographic point.
 }
 \examples{
 #Get the 5 closest stations
-getDists(37,8, -121.22, n = 5)
+getDists(37.8, -121.22, n = 5)
 
 }
 \author{
