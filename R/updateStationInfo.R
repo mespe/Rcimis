@@ -1,12 +1,22 @@
 updateStationInfo = function(filename = getOption("CIMIS_STATION_FILE", system.file("StationInfo.rds", package = "Rcimis"))) {
     ## Not sure how we want to handle this
-    StnInfo = getStationInfo()
+    StnInfo = getStationInfo.web()
     # only if check permissions.
     saveRDS(StnInfo, file = filename)
     StnInfo
 }
 
-getStationInfo = function(...){
+
+getStationInfo =
+function(cached = FALSE)
+{
+    if(!cached)
+        return(updateStationInfo())
+
+    readRDS(system.file("StationInfo.rds", package = "Rcimis"))
+}
+
+getStationInfo.web = function(...){
     ##This gets the station info from the CIMIS site
     stations = getURL('http://et.water.ca.gov/api/station', ...)
     tmp = fromJSON(stations)$Stations
