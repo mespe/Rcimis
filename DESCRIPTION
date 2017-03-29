@@ -3,12 +3,12 @@ Title: R interface to the CIMIS (California Irrigation Management System) REST
     API
 Version: 0.1-0
 Description: ...
-License: MIT+LICENSE
+License: MIT + file LICENSE
 Maintainer: Matt Espe <mespe@ucdavis.edu>
 Author: Matt Espe, Duncan Temple Lang
 Imports:
     RCurl,
     jsonlite,
-	geosphere
+    geosphere
 LazyData: true
 RoxygenNote: 5.0.1
