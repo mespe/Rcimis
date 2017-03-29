@@ -7,6 +7,7 @@
 ##' @param lon longitude, in decimal degrees
 ##' @param n number of nearest stations to return
 ##' @param FUN the function used to calculate the distance. Passed to the \code{distm} function in the \code{geospheres} package
+##' @param cached logical, should the cached station information be used, or should a up to the date version be retrieved from CIMIS
 ##' @param StnInfo object providing details of the CIMIS weather stations. This can be retrieved
 ##' using \code{getStationInfo} or \code{updateStationInfo}.
 ##' @return a subset of \code{StnInfo} ordered by distance to the specificed point, with the distance in Km added
