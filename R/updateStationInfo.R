@@ -1,7 +1,9 @@
-updateStationInfo = function(filename = "../data/StnInfo.rda"){
+updateStationInfo = function(filename = getOption("CIMIS_STATION_FILE", system.file("StationInfo.rds", package = "Rcimis"))) {
     ## Not sure how we want to handle this
     StnInfo = getStationInfo()
-    save(StnInfo, file = filename)    
+    # only if check permissions.
+    saveRDS(StnInfo, file = filename)
+    StnInfo
 }
 
 getStationInfo = function(...){
