@@ -17,6 +17,7 @@ function(filename = "../../R/ValidOpts.R")
 
     if(length(filename) && !is.na(filename) && filename != "") {
        txt = capture.output(dput(tbls))
+       txt = gsub("[‘’]", "'", txt)
        cat("ValidOptions <- ", txt, sep = "\n", file = filename)
     }
     tbls
