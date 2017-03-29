@@ -16,7 +16,7 @@
 ##' #Get the 5 closest stations
 ##' getDists(37.8, -121.22, n = 5)
 ##' 
-getDists = function(lat, lon, n = 1, FUN = distHaversine, StnInfo = getStationInfo()){
+getDists = function(lat, lon, n = 1, FUN = distHaversine, cached = TRUE, StnInfo = getStationInfo(cached)){
     ## Only compare stations which are close (within a degree)
     close = (diff(StnInfo$DdLatitude - lat) <= 1) & (diff(StnInfo$DdLongitude - lon) <= 1)
     
@@ -29,12 +29,3 @@ getDists = function(lat, lon, n = 1, FUN = distHaversine, StnInfo = getStationIn
     return(data.frame(StnInfo[close,][i,][1:n,],
                       distKm = ans[i][1:n]/1000))
     }
-
-getStationInfo =
-function(cached = FALSE)
-{
-    if(!cached)
-        return(updateStationInfo())
-
-    readRDS(system.file("StationInfo.rds", package = "Rcimis"))
-}
