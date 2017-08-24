@@ -20,7 +20,7 @@ library(devtools)
 install_github("mespe/Rcimis")
 ```
 
-###Use
+### Use
 
 The package currently looks in the users R options for the API key,
 which allows the user to store the key without having to re-enter it
